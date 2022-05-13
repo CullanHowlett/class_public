@@ -556,6 +556,21 @@ int background_w_fld(
     // w_ede(a) taken from eq. (11) in 1706.00730
     *w_fld = - dOmega_ede_over_da*a/Omega_ede/3./(1.-Omega_ede)+a_eq/3./(a+a_eq);
     break;
+  case PHANTOM:
+    double N = log(a);
+    if (pba->phantomtype == GAUSSIAN) {
+      *w_fld = pba->w0_fld - 2.0/3.0 * exp(-N*N*pba->phantomalpha);
+    } else if (pba->phantomtype == BESSEL) {
+      if (fabs(N*pba->phantomalpha) < 1.0e-6) {
+        *w_fld = pba->w0_fld;
+      } else {
+        *w_fld = pba->w0_fld - 2.0/3.0 * (sin(N*pba->phantomalpha)/(N*N*pba->phantomalpha*pba->phantomalpha) - cos(N*pba->phantomalpha)/(N*pba->phantomalpha));
+      }
+      //*w_fld = pba->w0_fld - 2.0/3.0 * sin(N*pba->phantomalpha)/(N*pba->phantomalpha);
+    } else {
+      class_stop(pba->error_message,"phantomtype not recognised, must be GAUSSIAN or BESSEL");
+    }
+    break;
   }
 
 
@@ -575,6 +590,20 @@ int background_w_fld(
       + dOmega_ede_over_da*dOmega_ede_over_da*a/3./(1.-Omega_ede)/(1.-Omega_ede)/Omega_ede
       + a_eq/3./(a+a_eq)/(a+a_eq);
     break;
+  case PHANTOM:
+    double N = log(a);
+    if (pba->phantomtype == GAUSSIAN) {
+      *dw_over_da_fld = 4.0/3.0 * N*pba->phantomalpha/a*exp(-N*N*pba->phantomalpha);
+    } else if (pba->phantomtype == BESSEL) {
+      if (fabs(N*pba->phantomalpha) < 1.0e-6) {
+        *dw_over_da_fld = 1.0/3.0;
+      } else {
+        *dw_over_da_fld = -2.0/3.0 * (2.0*cos(N*pba->phantomalpha)/(N*N*pba->phantomalpha) + sin(N*pba->phantomalpha)/N - 2.0*sin(N*pba->phantomalpha)/(N*N*N*pba->phantomalpha*pba->phantomalpha)) / a;
+      }
+      //*dw_over_da_fld = 2.0/3.0 * (cos(N*pba->phantomalpha)/N - sin(N*pba->phantomalpha)/(N*N*pba->phantomalpha)) / a;
+    } else {
+      class_stop(pba->error_message,"phantomtype not recognised, must be GAUSSIAN or BESSEL");
+    }
   }
 
   /** - finally, give the analytic solution of the following integral:
@@ -594,7 +623,23 @@ int background_w_fld(
   case EDE:
     class_stop(pba->error_message,"EDE implementation not finished: to finish it, read the comments in background.c just before this line\n");
     break;
+  case PHANTOM:
+    double N = log(a);
+    double N_today = log(pba->a_today);
+    if (pba->phantomtype == GAUSSIAN) {
+      *integral_fld = 3.*(1.+pba->w0_fld)*log(pba->a_today/a) + sqrt(_PI_/pba->phantomalpha)*(erf(N*sqrt(pba->phantomalpha)) - erf(N_today*sqrt(pba->phantomalpha)));
+    } else if (pba->phantomtype == BESSEL) {
+      if (fabs(N*pba->phantomalpha) < 1.0e-6) {
+        *integral_fld = 3.*(1.+pba->w0_fld)*log(pba->a_today/a);
+      } else {
+        //*integral_fld = 3.*(1.+pba->w0_fld)*log(pba->a_today/a) + 2.0/(N*N_today*pba->phantomalpha*pba->phantomalpha) * (N*sin(N_today*pba->phantomalpha) - N_today*sin(N*pba->phantomalpha));
+        *integral_fld = 3.*(1.+pba->w0_fld)*log(pba->a_today/a) + 2.0/pba->phantomalpha * (1.0 - sin(N*pba->phantomalpha)/(N*pba->phantomalpha));
+      }
+    } else {
+      class_stop(pba->error_message,"phantomtype not recognised, must be GAUSSIAN or BESSEL");
+    }
   }
+  //printf("%g, %g, %g, %g\n", a, *w_fld, *dw_over_da_fld, *integral_fld);
 
   /** note: of course you can generalise these formulas to anything,
       defining new parameters pba->w..._fld. Just remember that so

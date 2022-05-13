@@ -20,7 +20,11 @@ enum spatial_curvature {flat,open,closed};
 
 /** list of possible parametrisations of the DE equation of state */
 
-enum equation_of_state {CLP,EDE};
+enum equation_of_state {CLP,EDE,PHANTOM};
+
+/** list of possible parametrisations of PHANTOM DE equation of state */
+
+enum phantomtypes {GAUSSIAN,BESSEL};
 
 /**
  * All background parameters and evolution that other modules need to know.
@@ -66,6 +70,9 @@ struct background
   double w0_fld; /**< \f$ w0_{DE} \f$: current fluid equation of state parameter */
   double wa_fld; /**< \f$ wa_{DE} \f$: fluid equation of state parameter derivative */
   double Omega_EDE; /**< \f$ wa_{DE} \f$: Early Dark Energy density parameter */
+
+  enum phantomtypes phantomtype; /** Type for PHANTOM dark energy */
+  double phantomalpha; /** Type for constant value for PHANTOM dark energy */
 
   double cs2_fld; /**< \f$ c^2_{s~DE} \f$: sound speed of the fluid
 		     in the frame comoving with the fluid (so, this is

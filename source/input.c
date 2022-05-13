@@ -1351,6 +1351,10 @@ int input_read_parameters(
         pba->fluid_equation_of_state = EDE;
       }
 
+      else if ((strstr(string1,"PHANTOM") != NULL) || (strstr(string1,"phantom") != NULL)) {
+        pba->fluid_equation_of_state = PHANTOM;
+      }
+
       else {
         class_stop(errmsg,"incomprehensible input '%s' for the field 'fluid_equation_of_state'",string1);
       }
@@ -1366,6 +1370,22 @@ int input_read_parameters(
       class_read_double("w0_fld",pba->w0_fld);
       class_read_double("Omega_EDE",pba->Omega_EDE);
       class_read_double("cs2_fld",pba->cs2_fld);
+    }
+
+    if (pba->fluid_equation_of_state == PHANTOM) {
+      class_read_double("w0_fld",pba->w0_fld);
+      class_read_double("phantomalpha",pba->phantomalpha);
+      class_call(parser_read_string(pfc,"phantomtype",&string1,&flag1,errmsg),
+                 errmsg,
+                 errmsg);
+      if ((strstr(string1,"GAUSSIAN") != NULL) || (strstr(string1,"gaussian") != NULL)) {
+        pba->phantomtype = GAUSSIAN;
+      }
+      else if ((strstr(string1,"BESSEL") != NULL) || (strstr(string1,"bessel") != NULL)) {
+        pba->phantomtype = BESSEL;
+      }
+
+      // Check that phantomtype is suitable.
     }
   }
 
@@ -3215,6 +3235,9 @@ int input_default_params(
   pba->wa_fld = 0.;
   pba->Omega_EDE = 0.;
   pba->cs2_fld = 1.;
+  pba->phantomtype = GAUSSIAN;
+  pba->phantomalpha = 1.0e30;
+
 
   pba->shooting_failed = _FALSE_;
 
