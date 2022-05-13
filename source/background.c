@@ -771,15 +771,13 @@ int background_w_fld(
     break;
   case PHANTOM:
     double N = log(a);
-    double N_today = log(pba->a_today);
     if (pba->phantomtype == GAUSSIAN) {
-      *integral_fld = 3.*(1.+pba->w0_fld)*log(pba->a_today/a) + sqrt(_PI_/pba->phantomalpha)*(erf(N*sqrt(pba->phantomalpha)) - erf(N_today*sqrt(pba->phantomalpha)));
+      *integral_fld = 3.*(1.+pba->w0_fld)*log(1.0/a) + sqrt(_PI_/pba->phantomalpha)*erf(N*sqrt(pba->phantomalpha));
     } else if (pba->phantomtype == BESSEL) {
       if (fabs(N*pba->phantomalpha) < 1.0e-6) {
-        *integral_fld = 3.*(1.+pba->w0_fld)*log(pba->a_today/a);
+        *integral_fld = 3.*(1.+pba->w0_fld)*log(1.0/a);
       } else {
-        //*integral_fld = 3.*(1.+pba->w0_fld)*log(pba->a_today/a) + 2.0/(N*N_today*pba->phantomalpha*pba->phantomalpha) * (N*sin(N_today*pba->phantomalpha) - N_today*sin(N*pba->phantomalpha));
-        *integral_fld = 3.*(1.+pba->w0_fld)*log(pba->a_today/a) + 2.0/pba->phantomalpha * (1.0 - sin(N*pba->phantomalpha)/(N*pba->phantomalpha));
+        *integral_fld = 3.*(1.+pba->w0_fld)*log(1.0/a) + 2.0/pba->phantomalpha * (1.0 - sin(N*pba->phantomalpha)/(N*pba->phantomalpha));
       }
     } else {
       class_stop(pba->error_message,"phantomtype not recognised, must be GAUSSIAN or BESSEL");

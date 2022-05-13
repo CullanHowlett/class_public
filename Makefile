@@ -29,14 +29,8 @@ AR        = ar rv
 # In order to use Python 3, you can manually
 # substitute python3 to python in the line below, or you can simply
 # add a compilation option on the terminal command line:
-<<<<<<< HEAD
-# "PYTHON=python3 make all" (THanks to Marius Millea for pyhton3
-# compatibility)
-PYTHON ?= python3
-=======
 # "PYTHON=python3 make all" (Thanks to Marius Millea for python3 compatibility)
-PYTHON ?= python
->>>>>>> aa92943e4ab86b56970953589b4897adf2bd0f99
+PYTHON ?= python3
 
 # your optimization flag
 OPTFLAG = -O3
