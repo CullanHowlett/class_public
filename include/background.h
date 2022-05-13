@@ -71,29 +71,7 @@ struct background
 
   double Omega0_b; /**< \f$ \Omega_{0 b} \f$: baryons */
 
-<<<<<<< HEAD
-  double Omega0_cdm; /**< \f$ \Omega_{0 cdm} \f$: cold dark matter */
-
-  double Omega0_lambda; /**< \f$ \Omega_{0_\Lambda} \f$: cosmological constant */
-
-  double Omega0_fld; /**< \f$ \Omega_{0 de} \f$: fluid */
-
-  enum equation_of_state fluid_equation_of_state; /**< parametrisation scheme for fluid equation of state */
-
-  double w0_fld; /**< \f$ w0_{DE} \f$: current fluid equation of state parameter */
-  double wa_fld; /**< \f$ wa_{DE} \f$: fluid equation of state parameter derivative */
-  double Omega_EDE; /**< \f$ wa_{DE} \f$: Early Dark Energy density parameter */
-
-  enum phantomtypes phantomtype; /** Type for PHANTOM dark energy */
-  double phantomalpha; /** Type for constant value for PHANTOM dark energy */
-
-  double cs2_fld; /**< \f$ c^2_{s~DE} \f$: sound speed of the fluid
-		     in the frame comoving with the fluid (so, this is
-		     not [delta p/delta rho] in the synchronous or
-		     newtonian gauge!) */
-=======
   double Omega0_ur; /**< \f$ \Omega_{0 \nu r} \f$: ultra-relativistic neutrinos */
->>>>>>> aa92943e4ab86b56970953589b4897adf2bd0f99
 
   double Omega0_cdm;      /**< \f$ \Omega_{0 cdm} \f$: cold dark matter */
 
@@ -142,6 +120,8 @@ struct background
   double cs2_fld;  /**< \f$ c^2_{s~DE} \f$: sound speed of the fluid in the frame comoving with the fluid (so, this is
                       not [delta p/delta rho] in the synchronous or newtonian gauge!) */
   double Omega_EDE;        /**< \f$ wa_{DE} \f$: Early Dark Energy density parameter */
+  enum phantomtypes phantomtype; /** Type for PHANTOM dark energy */
+  double phantomalpha; /** Type for constant value for PHANTOM dark energy */
   double * scf_parameters; /**< list of parameters describing the scalar field potential */
   short attractor_ic_scf;  /**< whether the scalar field has attractor initial conditions */
   int scf_tuning_index;    /**< index in scf_parameters used for tuning */
