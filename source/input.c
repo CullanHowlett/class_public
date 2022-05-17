@@ -5794,6 +5794,9 @@ int input_default_params(struct background *pba,
   pba->wa_fld = 0.;
   /** 9.a.2.2) 'EDE' case */
   pba->Omega_EDE = 0.;
+  /** 9.a.2.2) 'PHANTOM' case */
+  pba->phantomtype = GAUSSIAN;
+  pba->phantomalpha = 1.0e30;
   /** 9.b) Omega scalar field */
   /** 9.b.1) Potential parameters and initial conditions */
   pba->scf_parameters = NULL;

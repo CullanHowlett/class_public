@@ -2375,6 +2375,12 @@ cdef class Class:
                 value = self.sd.sd_parameter_table[1]
             elif name == 'mu_sd':
                 value = self.sd.sd_parameter_table[2]
+            elif name == 'fluid_equation_of_state':
+                value = self.ba.fluid_equation_of_state
+            elif name == 'phantomtype':
+                value = self.ba.phantomtype
+            elif name == 'phantomalpha':
+                value = self.ba.phantomalpha
             else:
                 raise CosmoSevereError("%s was not recognized as a derived parameter" % name)
             derived[name] = value

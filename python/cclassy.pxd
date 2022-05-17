@@ -57,6 +57,15 @@ cdef extern from "class.h":
         double nonlinear_min_k_max
         ErrorMsg error_message
 
+    cdef enum equation_of_state:
+        CLP
+        EDE
+        PHANTOM
+
+    cdef enum phantomtypes:
+        GAUSSIAN
+        BESSEL
+
     cdef struct background:
         ErrorMsg error_message
         int bg_size
@@ -96,6 +105,9 @@ cdef extern from "class.h":
         double w0_fld
         double wa_fld
         double cs2_fld
+        double phantomalpha
+        phantomtypes phantomtype
+        equation_of_state fluid_equation_of_state
         double Omega0_ur
         double Omega0_dcdmdr
         double Omega0_dr
